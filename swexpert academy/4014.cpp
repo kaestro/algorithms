@@ -7,7 +7,7 @@ using namespace std;
 
 typedef pair< int, int > ii;
 typedef vector< int > vi;
-class floor {
+class Floor {
  public:
     int height;
     int length;
@@ -45,9 +45,9 @@ void read() {
     }
 }
 
-void createVF(vector< vector< floor > >& data) {
+void createVF(vector< vector< Floor > >& data) {
     for (auto row = 0; row < mapSize; ++row) {
-        vector< floor > rowData;
+        vector< Floor > rowData;
         int height = map[row][0], length = 0;
         for (auto col = 0; col < mapSize; ++col) {
             if (map[row][col] == height) {
@@ -63,7 +63,7 @@ void createVF(vector< vector< floor > >& data) {
     }
 
     for (auto col = 0; col < mapSize; ++col) {
-        vector< floor > colData;
+        vector< Floor > colData;
         int height = map[0][col], length = 0;
         for (auto row = 0; row < mapSize; ++row) {
             if (map[row][col] == height) {
@@ -79,7 +79,7 @@ void createVF(vector< vector< floor > >& data) {
     }
 }
 
-void showVF(const vector< vector< floor > >& data) {
+void showVF(const vector< vector< Floor > >& data) {
     for (auto v : data) {
         cout << "[";
         for (auto f : v) {
@@ -93,10 +93,10 @@ inline int abs(int input) {
     return input < 0 ? -input : input;
 }
 
-void compare(vector< vector< floor > >& data) {
+void compare(vector< vector< Floor > >& data) {
     for (auto& vf : data) {
         bool available = true;
-        for (vector< floor >::iterator it = vf.begin(); it + 1 != vf.end(); ++it) {
+        for (vector< Floor >::iterator it = vf.begin(); it + 1 != vf.end(); ++it) {
             if (abs(it->height - (it + 1)->height) != 1) {
                 available = false;
                 break;
@@ -115,7 +115,7 @@ void compare(vector< vector< floor > >& data) {
 }
 
 void solution() {
-    vector< vector< floor > > data;
+    vector< vector< Floor > > data;
     createVF(data);
     //showVF(data);
     compare(data);

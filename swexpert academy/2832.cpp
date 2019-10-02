@@ -34,7 +34,6 @@ void showMap();
 
 int main() {
     int T;
-    freopen("2832.txt", "r", stdin);
     cin >> T;
     for (auto testcase = 1; testcase <= T; ++testcase) {
         reset();
@@ -49,8 +48,8 @@ void read() {
     int numBacteria;
     cin >> mapSize >> hour >> numBacteria;
     map = vector< vector < vb > >(mapSize, vector< vb >(mapSize));
+    int row, col, bNumber, bDirection;
     for (auto i = 0; i < numBacteria; ++i) {
-        int row, col, bNumber, bDirection;
         cin >> row >> col >> bNumber >> bDirection;
         map[row][col].push_back({bNumber, bDirection - 1});
         answer += bNumber;
@@ -80,15 +79,17 @@ void revert(int& dirIdx) {
 
 void move() {
     auto newMap = vector< vector < vb > >(mapSize, vector< vb >(mapSize));
+    int nrow, ncol, diff;
+    vb::iterator baci;
     for (auto row = 0; row < mapSize; ++row) {
         for (auto col = 0; col < mapSize; ++col) {
             if (!map[row][col].empty()) {
-                auto baci = map[row][col].begin();
-                int nrow = row + direction[baci->dirIdx][0];
-                int ncol = col + direction[baci->dirIdx][1];
+                baci = map[row][col].begin();
+                nrow = row + direction[baci->dirIdx][0];
+                ncol = col + direction[baci->dirIdx][1];
                 if (isBoundary(nrow, ncol)) {
                     revert(baci->dirIdx);
-                    int diff = baci->number - (baci->number / 2);
+                    diff = baci->number - (baci->number / 2);
                     answer -= diff;
                     baci->number /= 2;
                 }
@@ -96,17 +97,18 @@ void move() {
             }
         }
     }
-    map.clear();
+    //map.clear();
     map = newMap;
 }
 
 void collect() {
+    int maxNo, maxDir, totalNumber;
     for (auto row = 0; row < mapSize; ++row) {
         for (auto col = 0; col < mapSize; ++col) {
             if (map[row][col].size() > 1) {
-                int maxNo = 0;
-                int maxDir = -1;
-                int totalNumber = 0;
+                maxNo = 0;
+                maxDir = -1;
+                totalNumber = 0;
                 for (auto vbi = map[row][col].begin(); vbi != map[row][col].end(); ++vbi){
                     totalNumber += vbi->number;
                     if (vbi->number > maxNo) {
@@ -115,9 +117,6 @@ void collect() {
                     }
                 }
                 map[row][col].clear();
-                if (maxDir < 0) {
-                    cout << "maxDir Error!" << endl;
-                }
                 map[row][col].push_back({totalNumber, maxDir});
             }
         }
@@ -137,5 +136,3 @@ void showMap() {
     }
     cout << endl;
 }
-
-

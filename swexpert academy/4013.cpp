@@ -9,7 +9,7 @@ const int noMagnet = 4;
 const int sizeMagnet = 8;
 const int clockwise = 1;
 const int counterClockwise = -1;
-const int RIGHT = 2; 
+const int RIGHT = 2;
 const int LEFT = 6;
 
 int magnet[noMagnet][sizeMagnet];
