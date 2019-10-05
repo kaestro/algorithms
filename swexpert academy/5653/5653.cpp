@@ -54,7 +54,7 @@ void breed(const ii& pos, const StemCell& sc);
 
 int main() {
     int T;
-    //freopen("5653.txt", "r", stdin);
+    freopen("5653.txt", "r", stdin);
     cin >> T;
     for (int testcase = 1; testcase <=T; ++testcase) {
         reset();
@@ -82,7 +82,7 @@ void simulate() {
     for (int i = 0; i < timeLimit; ++i) {
         for (myMap::iterator it = simulation.begin(); it != simulation.end();++it) {
             if (it->second.active == DEAD || it->second.lifetime == -1) continue;
-            if (it->second.active == ACTIVE) {
+            if (it->second.active == ACTIVE && it->second.lifetime == it->second.healthPoint) {
                 breed(it->first, it->second);
             }
             it->second.increment();
