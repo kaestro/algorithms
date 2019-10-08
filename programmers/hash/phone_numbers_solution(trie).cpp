@@ -7,28 +7,27 @@ bool answer;
 class Node {
  public:
     Node* next[10];
-    bool isNext;
-    bool isFinish;
+    bool hasNext;
+    bool isEndno;
 
-    Node(): isNext(false), isFinish(false) {
+    Node(): hasNext(false), isEndno(false) {
         for (int i = 0; i < 10; ++i)
             next[i] = NULL;
     }
 
     void insert(string temp) {
         if (temp.length() == 0) {
-            isFinish = true;
-            if (isFinish == isNext)
+            isEndno = true;
+            if (hasNext)
                 answer = false;
-            
             return;
         }
         int nextNum = temp[0] - '0';
 
         if (next[nextNum] == NULL) {
             next[nextNum] = new Node;
-            isNext = true;
-            if (isFinish == true) {
+            hasNext = true;
+            if (isEndno == true) {
                 answer = false;
                 return;
             }
