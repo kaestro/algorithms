@@ -30,6 +30,7 @@ class Node {
             isNext = true;
             if (isFinish == true) {
                 answer = false;
+                return;
             }
         }
 
@@ -44,6 +45,8 @@ bool solution(vector<string> phoneBook) {
     auto size = phoneBook.size();
     for (auto i = 0; i < size; ++i) {
         root->insert(phoneBook[i]);
+        if (answer == false)
+            return false;
     }
 
     return answer;
