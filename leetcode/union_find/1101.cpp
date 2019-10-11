@@ -35,24 +35,21 @@ class Solution {
 public:
     int earliestAcq(vector<vector<int>>& logs, int N) {
         int size = logs.size();
-        if (size < N) return -1;
+        if (size < N - 1) return -1;
         sort(logs.begin(), logs.end(), compare);
 
         vector< int > parent(N);
         for (int i = 0; i < N; ++i)
             parent[i] = i;
 
-        int time_max = -1;
-        for (int i = 0; i < N - 1; ++i) {
+        for (int i = 0; i < N - 2; ++i) {
             unionChild(parent, logs[i][1], logs[i][2]);
-            time_max = max(time_max, logs[i][0]);
         }
 
-        for (int i = N - 1; i < size; ++i) {
+        for (int i = N - 2; i < size; ++i) {
             unionChild(parent, logs[i][1], logs[i][2]);
-            time_max = max(time_max, logs[i][0]);
             if (allFriends(parent))
-                return time_max;
+                return logs[i][0];
         }
 
         return -1;
