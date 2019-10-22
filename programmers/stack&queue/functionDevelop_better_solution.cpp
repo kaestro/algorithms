@@ -11,12 +11,8 @@ vector<int> solution(vector<int> progresses, vector<int> speeds) {
 
     auto size = progresses.size();
     for (auto i = 0; i < size; ++i) {
-        int remnant = (100 - progresses[i]) % speeds[i];
-        int quotient = (100 - progresses[i]) / speeds[i];
-        if (remnant == 0)
-            finishedDays.push(quotient);
-        else
-            finishedDays.push(quotient + 1);
+        int finished_day = (100 - progresses[i] + speeds[i] - 1) / speeds[i]; // round up operation
+        finishedDays.push(finished_day);
     }
 
     while (!finishedDays.empty()) {
@@ -30,4 +26,5 @@ vector<int> solution(vector<int> progresses, vector<int> speeds) {
         }
         answer.push_back(numFlush);
     }
+    return answer;
 }
