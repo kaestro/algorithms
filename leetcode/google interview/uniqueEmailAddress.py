@@ -5,7 +5,7 @@ class Solution:
     def numUniqueEmails(self, emails: List[str]) -> int:
         uniqueEmails = set()
         for email in emails:
-            uniqueEmails.add(self.parseLocalName(email) + self.parseDomainName(email))
+            uniqueEmails.add(self.parseLocalName(email) + '@' + self.parseDomainName(email))
         
         return len(uniqueEmails)
 

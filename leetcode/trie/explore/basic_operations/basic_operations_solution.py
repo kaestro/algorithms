@@ -3,7 +3,7 @@ import collections
 class TrieNode:
     def __init__(self):
         self.children = collections.defaultdict(TrieNode)
-        self.isWord = False
+        self.is_word = False
 
 class Trie:
 
@@ -12,27 +12,24 @@ class Trie:
         
 
     def insert(self, word: str) -> None:
-        curNode = self.root
+        current = self.root
         for letter in word:
-            curNode = curNode.children[letter]
-        
+            current = current.children[letter]
+        current.is_word = True
 
     def search(self, word: str) -> bool:
-        curNode = self.root
+        current = self.root
         for letter in word:
-            curNode = curNode.children.get(letter)
-            if curNode is None:
+            current = current.children.get(letter)
+            if current is None:
                 return False
-
-        return curNode.isWord
-
-        
+        return current.is_word
 
     def startsWith(self, prefix: str) -> bool:
-        curNode = self.root
+        current = self.root
         for letter in prefix:
-            curNode = curNode.children.get(letter)
-            if curNode is None:
+            current = current.children.get(letter)
+            if current is None:
                 return False
         return True
         
