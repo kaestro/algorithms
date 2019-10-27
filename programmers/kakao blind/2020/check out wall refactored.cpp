@@ -9,21 +9,30 @@ inline int num_patrolling(vector<int>::const_iterator cit, vector<int>::const_it
     return int(cit - cbegin) + 1;
 }
 
+vector<int>& create_dist_btw_wp(vector<int>& weak_points, int wall_length) {
+    vector<int>* result = new vector<int>;
+    for (int i = 1; i < weak_points.size(); ++i)
+        result->push_back(weak_points[i] - weak_points[i - 1]);
+    result->push_back(weak_points[0] + wall_length - weak_points.back());
+    return *result;
+}
+
 // wp stands for weakpoints
 // weak_points stores dist of wps at wall from 0
 int solution(int wall_length, vector<int> weak_points, vector<int> patrol_dists) {
     if (weak_points.size() == 1)
         return 1;
 
-    vector<int> dist_btw_wp;
-    for (int i = 1; i < weak_points.size(); ++i)
-        dist_btw_wp.push_back(weak_points[i] - weak_points[i - 1]);
-    dist_btw_wp.push_back(weak_points[0] + wall_length - weak_points.back());
+    vector<int> dist_btw_wp = create_dist_btw_wp(weak_points, wall_length);
 
     sort(patrol_dists.begin(), patrol_dists.end());
     auto num_wp = weak_points.size();
 
     int ans = 0x3f3f3f3f;
+    // TODO//
+    // seems next_permutation is enough and 2 for loops inside
+    // do_while loop seems overkill.
+    // Needs to be checked
     do {
         for (int first_wp_idx = 0; first_wp_idx < num_wp; ++first_wp_idx) {
             int end_wp_idx = (first_wp_idx + num_wp - 1) % num_wp;
