@@ -52,15 +52,38 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
     myMap* build_frame_map = process_orders(build_frame);
     answer = convertMapToVector(build_frame_map);
 
+    delete build_frame_map;
     return *answer;
 }
 
 int main() {
-    vvi build_frame = {
-        {1,0,0,1}, {1,1,1,1}, {2,1,0,1}, {2,2,1,1},
-        {5,0,0,1}, {5,1,0,1}, {4,2,1,1}, {3,2,1,1}
+    vector<vvi> build_frames {
+        { 
+            {1,0,0,1}, {1,1,1,1}, {2,1,0,1}, {2,2,1,1},
+            {5,0,0,1}, {5,1,0,1}, {4,2,1,1}, {3,2,1,1} 
+        },
+        { 
+            {0,0,0,1}, {3,0,0,1}, {0,1,1,1}, {2,1,1,1}, {1,1,1,1},
+            {1,1,1,0} },
+        {
+            {0,0,0,1}, {4,0,0,1}, {0,1,1,1}, {3,1,1,1},
+            {1,0,0,1},{1,1,1,1}, {2,1,1,1},
+            {1,0,0,0}, {2,1,1,0}
+        },
+        {
+            {0,0,0,1}, {4,0,0,1}, {0,1,1,1}, {3,1,1,1},
+            {1,0,0,1}, {1,1,1,1}, {2,1,1,1}, {2,1,0,1},
+            {2,1,1,0}
+        },
+        {
+            {0,0,0,1}, {4,0,0,1}, {0,1,1,1}, {3,1,1,1},
+            {1,0,0,1}, {1,1,1,1}, {2,1,1,1}, {3,1,0,1},
+            {2,1,1,0}
+        }  
     };
-    solution(5, build_frame);
+    solution(5, build_frames[2]);
+    // solution(5, build_frames[3]);
+    solution(5, build_frames[4]);
 }
 
 vvi* convertMapToVector(myMap* build_frame_map) {
@@ -129,17 +152,30 @@ void BuildFrame::destruct_pillar(ii position) {
 }
 
 bool BuildFrame::is_destructable_pillar(int row, int col) {
-    bool flag = false;
-    if ((*structure)[{col - 1, row + 1}].exist_beam && (*structure)[{col, row + 1}].exist_beam)
-        flag = true;
-    else if (
-        !(*structure)[{col - 1, row + 1}].exist_beam
-        && !(*structure)[{col, row + 1}].exist_beam
-        && !(*structure)[{col, row + 1}].exist_pillar
-    )
-        flag = true;
+    vector<bool> flags = {
+        (*structure)[{col, row + 1}].exist_pillar,
+        (*structure)[{col - 1, row + 1}].exist_beam,
+        (*structure)[{col, row + 1}].exist_beam
+    }; // pillar, left beam, right beam
 
-    return flag;
+    if (flags == vector<bool>{false, false, false}) return true;
+
+    if (flags == vector<bool>{true, false, false}) return false;
+
+    if (flags == vector<bool>{true, true, false} || flags == vector<bool>{false, true, false})
+        if (!(*structure)[{col - 1, row}].exist_pillar)
+            return false;
+    
+    if (flags == vector<bool>{true, false, true} || flags == vector<bool>{false, false, true})
+        if (!(*structure)[{col + 1, row}].exist_pillar)
+            return false;
+    
+    if (flags == vector<bool>{true, true, true} || flags == vector<bool>{false, true, true})
+        if (!(*structure)[{col - 1, row}].exist_pillar && !(*structure)[{col - 2, row + 1}].exist_beam ||
+            !(*structure)[{col + 1, row}].exist_pillar && !(*structure)[{col + 1, row + 1}].exist_beam )
+            return false;
+
+    return true;
 }
 
 void BuildFrame::destruct_beam(ii position) {
@@ -148,5 +184,13 @@ void BuildFrame::destruct_beam(ii position) {
 }
 
 bool BuildFrame::is_destructable_beam(int row, int col) {
-    return !exists_beam_both_end(row, col);
+    if ((*structure)[{col - 1, row}].exist_beam && !exists_pillar_under(row, col - 1)) return false;
+    if ((*structure)[{col + 1, row}].exist_beam && !exists_pillar_under(row, col + 1)) return false;
+    if ((*structure)[{col, row}].exist_pillar && !(*structure)[{col, row - 1}].exist_pillar
+        && !(*structure)[{col - 1, row}].exist_beam
+    ) return false;
+    if ((*structure)[{col + 1, row}].exist_pillar && !(*structure)[{col + 1, row}].exist_beam
+        && !(*structure)[{col + 1, row - 1}].exist_pillar
+    ) return false;
+    return true;
 }
